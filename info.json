@@ -1,0 +1,16 @@
+{
+    "name": "flesh-planet",
+    "title": "TBD",
+    "description": "TBD",
+    "author": "Dr. Dog PhD",
+    "homepage": "https://lua-api.factorio.com/latest/auxiliary/mod-structure.html",
+    "version": "0.0.1",
+    "factorio_version": "2.0",
+    "dependencies": [
+      "base >= 2.0",
+      "space-age >= 2.0",
+      "PlanetsLib >= 1.15.2",
+      "flib"
+    ],
+    "space_travel_required": true
+  }
