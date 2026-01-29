@@ -74,12 +74,8 @@ entity["circuit_connector"] = circuit_connector_definitions.create_vector(
       },
     }
   )
-entity["fluid_boxes"] = {
-    {
-      volume = 1000,
-      production_type = "input",
-      pipe_covers = pipecoverspictures(),
-      pipe_picture = {
+
+local pipes = {
         north = {
           layers = {
             {
@@ -136,53 +132,80 @@ entity["fluid_boxes"] = {
             },
           },
         },
-      },
+}
+entity["fluid_boxes"] = {
+    {
+      volume = 1000,
+      production_type = "input",
+      pipe_covers = pipecoverspictures(),
+      pipe_picture = table.deepcopy(pipes),
       pipe_connections = {
         {
-          direction = defines.direction.east,
-          flow_direction = "input-output",
-          position = { 2, 1 },
-        },
-        {
           direction = defines.direction.south,
-          flow_direction = "input-output",
-          position = { 1, 2 },
-        },
-        {
-          direction = defines.direction.south,
-          flow_direction = "input-output",
+          flow_direction = "input",
           position = { -1, 2 },
-        },
-        {
-          direction = defines.direction.west,
-          flow_direction = "input-output",
-          position = { -2, 1 },
-        },
-        {
-          direction = defines.direction.north,
-          flow_direction = "input-output",
-          position = { -1, -2 },
-        },
-        {
-          direction = defines.direction.north,
-          flow_direction = "input-output",
-          position = { 1, -2 },
-        },
-        {
-          direction = defines.direction.west,
-          flow_direction = "input-output",
-          position = { -2, -1 },
-        },
-        {
-          direction = defines.direction.east,
-          flow_direction = "input-output",
-          position = { 2, -1 },
-        },
+        }
       },
       secondary_draw_orders = {
         north = -1,
-      },
+        west = -1,
+        east = -1
+      }
     },
+    {
+      volume = 1000,
+      production_type = "input",
+      pipe_covers = pipecoverspictures(),
+      pipe_picture = table.deepcopy(pipes),
+      pipe_connections = {
+        {
+          direction = defines.direction.south,
+          flow_direction = "input",
+          position = { 1, 2 },
+        }
+      },
+      secondary_draw_orders = {
+        north = -1,
+        west = -1,
+        east = -1
+      }
+    },
+    {
+      volume = 1000,
+      production_type = "output",
+      pipe_covers = pipecoverspictures(),
+      pipe_picture = table.deepcopy(pipes),
+      pipe_connections = {
+        {
+          direction = defines.direction.west,
+          flow_direction = "output",
+          position = { -2, 1 },
+        }
+      },
+      secondary_draw_orders = {
+        north = -1,
+        west = -1,
+        east = -1
+      }
+    },
+    {
+      volume = 1000,
+      production_type = "output",
+      pipe_covers = pipecoverspictures(),
+      pipe_picture = table.deepcopy(pipes),
+      pipe_connections = {
+        {
+          direction = defines.direction.east,
+          flow_direction = "output",
+          position = { 2, 1 },
+        }
+      },
+      secondary_draw_orders = {
+        north = -1,
+        west = -1,
+        east = -1
+    }
   }
+}
 
 data:extend({entity})
