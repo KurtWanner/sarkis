@@ -15,6 +15,12 @@ local basic = {
   allow_productivity = true,
   maximum_productivity = 9999999,
   auto_recycle = false,
+  crafting_machine_tint = {
+    primary = {1,0,0},
+    secondary = {1,0,0},
+    tertiary = {1,0,0},
+    quaternary = {1,0,0}
+  }
 }
 
 local digging = {
@@ -36,6 +42,12 @@ local digging = {
   maximum_productivity = 9999999,
   main_product = "sarkis-flesh",
   auto_recycle = false,
+  crafting_machine_tint = {
+    primary = {1,0,0},
+    secondary = {1,0,0},
+    tertiary = {1,0,0},
+    quaternary = {1,0,0}
+  }
 }
 
 local advanced = {
@@ -59,6 +71,12 @@ local advanced = {
   maximum_productivity = 9999999,
   main_product = "sarkis-flesh",
   auto_recycle = false,
+  crafting_machine_tint = {
+    primary = {1,0,0},
+    secondary = {1,0,0},
+    tertiary = {1,0,0},
+    quaternary = {1,0,0}
+  }
 }
 
 data:extend({

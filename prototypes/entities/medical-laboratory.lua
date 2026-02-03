@@ -1,12 +1,14 @@
 local entity = table.deepcopy(data.raw["assembling-machine"]["foundry"])
 
+entity["type"] = "assembling-machine"
 entity["name"] = "medical-laboratory"
 entity["minable"]["result"] = "medical-laboratory"
 entity["crafting_categories"] = {"flesh-processing"}
+entity["icon"] = "__flesh-planet__/graphics/items/medical-laboratory/icon.png"
 entity["ingredient_count"] = 5
 entity["fast_replaceable_group"] = ""
 entity["crafting_speed"] = 1
-entity["energy_usage"] = "1400kW"
+
 entity["tile_width"] = 5
 entity["tile_height"] = 5
 entity["graphics_set"] = {
@@ -207,5 +209,31 @@ entity["fluid_boxes"] = {
     }
   }
 }
+
+entity["energy_source"] = {
+  type = "fluid",
+  burns_fluid = true,
+  scale_fluid_usage = true,
+  fluid_box = {
+      filter = "sarkis-blood",
+      volume = 1000,
+      production_type = "input",
+      pipe_covers = pipecoverspictures(),
+      pipe_picture = table.deepcopy(pipes),
+      pipe_connections = {
+        {
+          direction = defines.direction.north,
+          flow_direction = "input",
+          position = { 0, -2 },
+        }
+      },
+      secondary_draw_orders = {
+        north = -1,
+        west = -1,
+        east = -1
+      }
+    }
+}
+entity["energy_usage"] = "300kW"
 
 data:extend({entity})

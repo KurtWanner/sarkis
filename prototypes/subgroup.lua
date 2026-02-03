@@ -18,3 +18,12 @@ data:extend {{
     type = "recipe-category",
     name = "flesh-processing"
 }}
+
+
+-- Sarkis tiles
+data:extend {{
+    type = "item-subgroup",
+    name = "sarkis-tiles",
+    group = "tiles",
+    order = "s"
+}}

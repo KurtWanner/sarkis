@@ -5,3 +5,6 @@ Sarkis.constants.flesh_drills = {
     ["big-mining-drill"] = "sarkis-flesh-digging-advanced"
 }
 
+Sarkis.constants.pumpjacks = {
+    ["pumpjack"] = "pumpjack"
+}

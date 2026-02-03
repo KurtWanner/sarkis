@@ -18,18 +18,16 @@ planet_map_gen.sarkis = function()
         {
           settings =
           {
-            ["sarkis-red-desert"] = {},
-            ["sarkis-dirt-1"] = {},
+            ["sarkis-skin-1"] = {},
+            ["sarkis-skin-2"] = {},
 
           }
         },
         ["decorative"] = {
           settings =
           {
-            ["medium-rock"] = {},
             ["small-rock"] = {},
             ["tiny-rock"] = {},
-            ["crater-small"] = {},
                 
           }
         },
@@ -37,7 +35,6 @@ planet_map_gen.sarkis = function()
         {
           settings =
           {
-            ["stone"] = {},
             
           }
         }

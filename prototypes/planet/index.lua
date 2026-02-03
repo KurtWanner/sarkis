@@ -1,3 +1,6 @@
+require "tiles/skin-1"
+require "tiles/skin-2"
+require "inflammation"
 require "planet"
 require "tiles"
 require "planet_map_gen"

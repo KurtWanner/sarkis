@@ -8,6 +8,7 @@ local item = {
     flow_color = {102, 0, 0},
     subgroup = "flesh-subgroup",
     order = "flesh",
+    fuel_value = "10kJ"
 }
 
 data:extend({item})

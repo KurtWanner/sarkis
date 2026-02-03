@@ -26,7 +26,7 @@ PlanetsLib:extend({
         magnitude = 1.6,
         order = "z[sarkis]",
         solar_power_in_space = 600,
-        pollutant_type = nil,
+        pollutant_type = "inflammation",
         platform_procession_set = nil,
         planet_procession_set = nil,
         surface_properties = {

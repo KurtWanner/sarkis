@@ -10,7 +10,7 @@ local recipe = {
   subgroup = "flesh-subgroup",
 
   -- Graphics
-  icon = "__flesh-planet__/graphics/indentured-housing/icons/indentured-housing.png",
+  icon = "__flesh-planet__/graphics/items/indentured-housing/icon.png",
 
   -- Recipe
   ingredients = {

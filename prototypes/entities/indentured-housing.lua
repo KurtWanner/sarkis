@@ -3,7 +3,7 @@ local indentured_housing = {
     name = "indentured-housing",
 
     -- Graphics
-    icon = "__flesh-planet__/graphics/indentured-housing/icons/indentured-housing.png",
+    icon = "__flesh-planet__/graphics/items/indentured-housing/icon.png",
     icon_size = 64,
 
     graphics_set = {

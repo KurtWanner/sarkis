@@ -94,7 +94,7 @@ local delayed_functions = {}
 function Public.execute_later(function_key, ticks, ...)
 	local marked_for_death_render_object = rendering.draw_line {
 		color = {0, 0, 0, 0},
-		width = 0,
+		width = 0, 
 		filled = false,
 		from = {0, 0},
 		to = {0, 0},

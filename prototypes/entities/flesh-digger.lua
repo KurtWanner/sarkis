@@ -54,6 +54,10 @@ for extractor in pairs(Sarkis.constants.flesh_drills) do
         fluid_boxes = {fluid_boxes}
         extractor.fluid_boxes = fluid_boxes
     end
+    extractor.emissions_per_second = {
+        inflammation = 3
+    }
+    extractor.fluid_boxes_off_when_no_fluid_recipe = false
     extractor.crafting_speed = extractor.mining_speed
     extractor.mining_speed = nil
     extractor.fast_replaceable_group = (extractor.fast_replaceable_group or extractor.name) .. "-flesh-drill"
