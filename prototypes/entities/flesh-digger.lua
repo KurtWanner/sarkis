@@ -43,7 +43,7 @@ for extractor in pairs(Sarkis.constants.flesh_drills) do
     extractor.placeable_by = {item = extractor.name, count = 1}
     extractor.localised_name = extractor.localised_name or {"entity-name." .. extractor.name}
     extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
-    extractor.hidden_in_factoriopedia = false
+    extractor.hidden_in_factoriopedia = true
     extractor.fixed_recipe = Sarkis.constants.flesh_drills[extractor.name]
     if extractor.input_fluid_box ~= nil then
         local fluid_boxes = table.deepcopy(extractor.input_fluid_box)
@@ -67,3 +67,9 @@ for extractor in pairs(Sarkis.constants.flesh_drills) do
     extractor.name = extractor.name .. "-flesh-drill"
     data:extend {extractor}
 end
+
+local new_test = table.deepcopy(data.raw["assembling-machine"]["big-mining-drill-flesh-drill"])
+new_test.name = "testing"
+new_test.fixed_recipe = "sarkis-flesh-digging"
+
+data:extend {new_test}

@@ -1,3 +1,4 @@
+require "fluid-injection"
 require "indentured-housing"
 require "medical-laboratory"
 require "sarkis-flesh-digging"

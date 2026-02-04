@@ -2,9 +2,9 @@
 local rro = Sarkis.rro
 local Public = {}
 
-local pumpjack_prototypes = prototypes.get_entity_filtered{{filter="type",type="mining-drill"}}
+local mining_drill_prototypes = prototypes.get_entity_filtered{{filter="type",type="mining-drill"}}
 
-function Public.construct_pumpjack_beacon(event)
+function Public.construct_reverse_pumpjack(event)
     --game.print("Constructing flesh drill...")
     local player = game.get_player(event.player_index)
     if not player or not player.valid then return end
@@ -26,7 +26,7 @@ function Public.construct_pumpjack_beacon(event)
     end
 
     if not Sarkis.constants.pumpjacks[name] then return end
-    local drill_name = name .. "-beacon"
+    local drill_name = "reverse-" .. name
     
     local position = event.cursor_position
     local direction = event.cursor_direction
@@ -93,8 +93,8 @@ function Public.construct_pumpjack_beacon(event)
 end
 
 
-Sarkis.events.register_delayed_function("construct_pumpjack_beacon", Public.construct_pumpjack_beacon)
+Sarkis.events.register_delayed_function("construct_reverse_pumpjack", Public.construct_reverse_pumpjack)
 
 Sarkis.events.on_event({"build", "build-ghost", "super-forced-build"}, function(event)
-    Sarkis.events.execute_later("construct_pumpjack_beacon", 1, event)
+    Sarkis.events.execute_later("construct_reverse_pumpjack", 1, event)
 end)

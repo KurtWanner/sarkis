@@ -19,6 +19,11 @@ data:extend {{
     name = "flesh-processing"
 }}
 
+-- Fluid Injection
+data:extend {{
+    type = "recipe-category",
+    name = "fluid-injection"
+}}
 
 -- Sarkis tiles
 data:extend {{

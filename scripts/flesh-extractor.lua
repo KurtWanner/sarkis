@@ -11,14 +11,25 @@ function tablelength(T)
 end
 
 
-function Public.update_flesh_extractor(entity)
+function Public.update_flesh_extractor(t)
+
+    local event, entity, recurse =
+        t.event,
+        t.entity,
+        t.recurse or false
+
+    -- Search for surrounding drills
+    -- Based on number of drills, get new entity
+    -- Destroy and rebuild drill
 
     game.print("Attempting to update entity")
 
     local surface = entity.surface
     if surface.name ~= "sarkis" then return end
+    local player = game.get_player(event.player_index)
     local position = entity.position
     local quality = entity.quality
+    local direction = entity.direction
     local name = entity.name
     -- Get this drill prototype
     -- Remove "-flesh-drill"
@@ -32,8 +43,35 @@ function Public.update_flesh_extractor(entity)
     }
 
     local num = tablelength(mining_drills)
+    if num <= 2 then return end
 
-    game.print(tostring(num))
+    entity.destroy()
+
+    local new_entity = surface.create_entity {
+        name = name,
+        position = position,
+        force = player.force,
+        player = player,
+        quality = quality,
+        direction = direction,
+        raise_built = false,
+        create_build_effect_smoke = false,
+    }
+
+    if not recurse then return end
+
+    mining_drills = surface.find_entities_filtered{ 
+        area= {{position.x-range_offset,position.y-range_offset},{position.x+range_offset,position.y+range_offset}}, 
+        type = {"assembling-machine"},
+    }
+
+    for _, machine in pairs(mining_drills) do
+        if string.find(machine.name, "flesh-drill") then
+            Public.update_flesh_extractor{event=event, entity=machine, recurse=false}
+        end
+    end
+
+    --game.print(tostring(num))
 
 end
 
@@ -127,7 +165,7 @@ function Public.construct_flesh_extractor(event)
         force.get_entity_build_count_statistics(surface).on_flow(name,1)
     end
 
-    Public.update_flesh_extractor(new_entity)
+    Public.update_flesh_extractor{event=event, entity=new_entity,recurse=true}
 
 end
 
