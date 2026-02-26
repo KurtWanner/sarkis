@@ -9,6 +9,13 @@ data:extend {{
 
 data:extend {{
     type = "custom-input",
+    name = "mine",
+    key_sequence = "",
+    linked_game_control = "mine"
+}}
+
+data:extend {{
+    type = "custom-input",
     name = "rotate",
     key_sequence = "",
     linked_game_control = "rotate"
@@ -35,41 +42,42 @@ data:extend {{
     linked_game_control = "super-forced-build"
 }}
 
-for extractor in pairs(Sarkis.constants.flesh_drills) do
-    if not data.raw["mining-drill"][extractor] then error("Invalid sand extractor: " .. extractor) end
-    local extractor = table.deepcopy(data.raw["mining-drill"][extractor])
-    extractor.type = "assembling-machine"
-    extractor.crafting_categories = {"ground-digging"}
-    extractor.placeable_by = {item = extractor.name, count = 1}
-    extractor.localised_name = extractor.localised_name or {"entity-name." .. extractor.name}
-    extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
-    extractor.hidden_in_factoriopedia = true
-    extractor.fixed_recipe = Sarkis.constants.flesh_drills[extractor.name]
-    if extractor.input_fluid_box ~= nil then
-        local fluid_boxes = table.deepcopy(extractor.input_fluid_box)
-        for i in pairs(fluid_boxes["pipe_connections"]) do
-            fluid_boxes["pipe_connections"][i]["flow_direction"] = "output"
+
+for _, drill in pairs(Sarkis.constants.flesh_drills) do
+    if not data.raw["mining-drill"][drill] then error("Invalid sand extractor: " .. drill) end
+    local key = drill:gsub("-", "_")
+    for i=0,Sarkis.constants[key].max_neighbors do
+    
+        local extractor = table.deepcopy(data.raw["mining-drill"][drill])
+        extractor.type = "assembling-machine"
+        extractor.crafting_categories = {"ground-digging"}
+        extractor.placeable_by = {item = extractor.name, count = 1}
+        extractor.localised_name = extractor.localised_name or {"entity-name." .. extractor.name}
+        extractor.localised_description = extractor.localised_description or {"?", {"entity-description." .. extractor.name}, ""}
+        extractor.hidden_in_factoriopedia = true
+        extractor.hidden = true
+        extractor.factoriopedia_alternative = drill
+        extractor.allowed_module_categories = {"sarkis-module", "speed", "efficiency", "productivity", "quality"}
+        extractor.allowed_effects = {"productivity", "consumption", "speed", "pollution", "quality"}
+        extractor.name = "flesh-" .. drill .. "-" .. i
+        extractor.fixed_recipe = extractor.name
+        if extractor.input_fluid_box ~= nil then
+            local fluid_boxes = table.deepcopy(extractor.input_fluid_box)
+            for i in pairs(fluid_boxes["pipe_connections"]) do
+                fluid_boxes["pipe_connections"][i]["flow_direction"] = "input-output"
+            end
+            fluid_boxes["production_type"] = "output"
+            fluid_boxes = {fluid_boxes}
+            extractor.fluid_boxes = fluid_boxes
         end
-        fluid_boxes["production_type"] = "output"
-        fluid_boxes = {fluid_boxes}
-        extractor.fluid_boxes = fluid_boxes
+        extractor.emissions_per_second = {
+            inflammation = 3
+        }
+        extractor.fluid_boxes_off_when_no_fluid_recipe = false
+        extractor.crafting_speed = extractor.mining_speed
+        extractor.mining_speed = nil
+        extractor.next_upgrade = nil
+        extractor.resource_drain_rate_percent = nil
+        data:extend {extractor}
     end
-    extractor.emissions_per_second = {
-        inflammation = 3
-    }
-    extractor.fluid_boxes_off_when_no_fluid_recipe = false
-    extractor.crafting_speed = extractor.mining_speed
-    extractor.mining_speed = nil
-    extractor.fast_replaceable_group = (extractor.fast_replaceable_group or extractor.name) .. "-flesh-drill"
-    extractor.next_upgrade = nil
-    extractor.allowed_effects = {"productivity", "consumption", "speed", "pollution", "quality"}
-    extractor.resource_drain_rate_percent = nil
-    extractor.name = extractor.name .. "-flesh-drill"
-    data:extend {extractor}
 end
-
-local new_test = table.deepcopy(data.raw["assembling-machine"]["big-mining-drill-flesh-drill"])
-new_test.name = "testing"
-new_test.fixed_recipe = "sarkis-flesh-digging"
-
-data:extend {new_test}

@@ -14,5 +14,7 @@ fluid_box.pipe_connections[1].flow_direction = "input"
 fluid_box["production_type"] = "input"
 entity.fluid_boxes = {fluid_box}
 entity.output_fluid_box = nil
+entity.factoriopedia_alternative = "pumpjack"
+entity.hidden_in_factoriopedia = true
 
 data:extend({entity})

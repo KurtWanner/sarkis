@@ -1,6 +1,6 @@
+require "mod-data/index"
 require "subgroup"
 require "items/index"
 require "recipes/index"
-require "mod-data/index"
 require "entities/index"
 require "planet/index"

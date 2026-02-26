@@ -32,3 +32,8 @@ data:extend {{
     group = "tiles",
     order = "s"
 }}
+
+data:extend{{
+    type = "module-category",
+    name = "sarkis-module"
+}}

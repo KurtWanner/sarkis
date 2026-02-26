@@ -6,17 +6,47 @@ local mining_drill_prototypes = prototypes.get_entity_filtered{{filter="type",ty
 
 function tablelength(T)
   local count = 0
-  for _ in pairs(T) do count = count + 1 end
+  for _, entity in pairs(T) do 
+    if entity.name:find("flesh") and entity.name:find("mining--drill") then
+        count = count + 1 
+    end
+    
+end
   return count
 end
 
+function Public.update_neighbors(event)
+
+    game.print(event.entity.name)
+    local entity = event.entity
+    local name = entity.name
+    local position = entity.position
+    local surface = entity.surface
+
+    if not (name:find("flesh") and name:find("mining--drill")) then return end
+
+    local range_offset = 10
+
+    local mining_drills = surface.find_entities_filtered{ 
+        area= {{position.x-range_offset,position.y-range_offset},{position.x+range_offset,position.y+range_offset}}, 
+        type = {"assembling-machine"},
+    }
+
+    for _, machine in pairs(mining_drills) do
+        if machine.name:find("flesh") and machine.name:find("mining--drill") and machine ~= entity then
+            Sarkis.events.execute_later("update_neighbors", 1, {event=event, entity=machine, recurse=false})
+        end
+    end
+
+end
 
 function Public.update_flesh_extractor(t)
 
-    local event, entity, recurse =
+    local event, entity, recurse, sub =
         t.event,
         t.entity,
-        t.recurse or false
+        t.recurse or false,
+        t.sub or 0
 
     -- Search for surrounding drills
     -- Based on number of drills, get new entity
@@ -26,14 +56,16 @@ function Public.update_flesh_extractor(t)
 
     local surface = entity.surface
     if surface.name ~= "sarkis" then return end
-    local player = game.get_player(event.player_index)
     local position = entity.position
     local quality = entity.quality
     local direction = entity.direction
     local name = entity.name
     -- Get this drill prototype
     -- Remove "-flesh-drill"
-    local drill_prototype = mining_drill_prototypes[string.sub(name, 1, -13)]
+    --game.print("Entity name: " .. name)
+    local drill_name = name:sub(7, -3)
+    --game.print("Drill name: " .. drill_name)
+    local drill_prototype = mining_drill_prototypes[drill_name]
     
     local range_offset = drill_prototype.get_mining_drill_radius(quality) 
 
@@ -42,21 +74,37 @@ function Public.update_flesh_extractor(t)
         type = {"assembling-machine"},
     }
 
-    local num = tablelength(mining_drills)
-    if num <= 2 then return end
+    local num = math.max(0, tablelength(mining_drills) - 1 - sub)
+    --game.print("Found " .. num .. " neighbors")
 
+    local deconstruct = entity.to_be_deconstructed() 
     entity.destroy()
 
+    local new_name = "flesh-" .. drill_name .. "-" .. math.min(num, Sarkis.constants[drill_name:gsub("-", "_")].max_neighbors)
+    --game.print("Replacing with " .. new_name)
+
+    local force
+    if(event.player_index) then
+        force = game.get_player(event.player_index).force
+    end
+
+    if(event.robot) then
+        force = event.robot.force
+    end
+
     local new_entity = surface.create_entity {
-        name = name,
+        name = new_name,
         position = position,
-        force = player.force,
-        player = player,
+        force = force,
         quality = quality,
         direction = direction,
         raise_built = false,
         create_build_effect_smoke = false,
     }
+
+    if deconstruct then
+        new_entity.order_deconstruction(force)
+    end
 
     if not recurse then return end
 
@@ -66,12 +114,10 @@ function Public.update_flesh_extractor(t)
     }
 
     for _, machine in pairs(mining_drills) do
-        if string.find(machine.name, "flesh-drill") then
+        if machine.name:find("flesh") and machine.name:find("mining--drill") and machine ~= new_entity then
             Public.update_flesh_extractor{event=event, entity=machine, recurse=false}
         end
     end
-
-    --game.print(tostring(num))
 
 end
 
@@ -97,13 +143,12 @@ function Public.construct_flesh_extractor(event)
     end
 
     if not Sarkis.constants.flesh_drills[name] then return end
-    local drill_name = name .. "-flesh-drill"
+    local drill_name = "flesh-" .. name .. "-0"
     
     local position = event.cursor_position
     local direction = event.cursor_direction
     local player_position = (player.character or player).position
     local distance = math.sqrt((position.x-player_position.x)^2+(position.y-player_position.y)^2)
-    if surface.entity_prototype_collides(drill_name, position, false) then return end
     if surface.get_tile(position).hidden_tile then 
         player.create_local_flying_text{
             text = {"console.can-not-place-here-unnatural-tile"},
@@ -170,7 +215,11 @@ function Public.construct_flesh_extractor(event)
 end
 
 
+Sarkis.events.on_event(Sarkis.events.events.on_destroyed(), Public.update_neighbors)
+
 Sarkis.events.register_delayed_function("construct_flesh_extractor", Public.construct_flesh_extractor)
+Sarkis.events.register_delayed_function("update_neighbors", Public.update_flesh_extractor)
+
 
 Sarkis.events.on_event({"build", "build-ghost", "super-forced-build"}, function(event)
     Sarkis.events.execute_later("construct_flesh_extractor", 1, event)
