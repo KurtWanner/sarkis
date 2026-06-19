@@ -42,14 +42,41 @@ data:extend {{
     linked_game_control = "super-forced-build"
 }}
 
+local entity = table.deepcopy(data.raw["mining-drill"]["burner-mining-drill"])
+
+entity.placeable_by = {item = entity.name, count = 1}
+entity.localised_name = entity.localised_name or {"entity-name." .. entity.name}
+entity.localised_description = entity.localised_description or {"?", {"entity-description." .. entity.name}, ""}
+entity.type = "assembling-machine"
+entity.crafting_categories = {"ground-digging"}
+entity.placeable_by = {item = entity.name, count = 1}
+entity.hidden_in_factoriopedia = true
+entity.hidden = true
+entity.factoriopedia_alternative = "burner-mining-drill"
+entity.name = "flesh-burner-mining-drill-0"
+entity.fixed_recipe = "flesh-burner-mining-drill-0"
+entity.emissions_per_second = {
+    inflammation = 3
+}
+entity.crafting_speed = entity.mining_speed
+entity.mining_speed = nil
+entity.next_upgrade = nil
+entity.resource_drain_rate_percent = nil
+
+data:extend({entity})
+
 
 for _, drill in pairs(Sarkis.constants.flesh_drills) do
     if not data.raw["mining-drill"][drill] then error("Invalid sand extractor: " .. drill) end
     local key = drill:gsub("-", "_")
     for i=0,Sarkis.constants[key].max_neighbors do
+        if Sarkis.constants[key].max_neighbors == 0 then
+            break
+        end
     
         local extractor = table.deepcopy(data.raw["mining-drill"][drill])
         extractor.type = "assembling-machine"
+        extractor.graphics_set = extractor.wet_mining_graphics_set
         extractor.crafting_categories = {"ground-digging"}
         extractor.placeable_by = {item = extractor.name, count = 1}
         extractor.localised_name = extractor.localised_name or {"entity-name." .. extractor.name}

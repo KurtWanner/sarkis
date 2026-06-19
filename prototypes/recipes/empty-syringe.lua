@@ -14,7 +14,8 @@ local recipe = {
 
   -- Recipe
   ingredients = {
-    {type = "item", name = "iron-plate", amount = 1}
+    {type = "item", name = "iron-plate", amount = 1},
+    {type = "item", name = "plastic-bar", amount = 1}
   },
 
   energy_required = 0.5, -- time in seconds

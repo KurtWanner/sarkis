@@ -1,7 +1,7 @@
 local recipe = {
   
   -- Creation Category
-  name = "blood-to-copper",
+  name = "blood-processing",
   type = "recipe",
   category = "flesh-processing",
   enabled = true,
@@ -19,11 +19,12 @@ local recipe = {
 
   energy_required = 1, -- time in seconds
   results = {
+    {type = "item", name = "iron-plate", amount = 5},
     {type = "item", name = "copper-plate", amount = 5},
-    {type = "fluid", name = "sarkis-plasma", amount = 50},
-    {type = "fluid", name = "water", amount = 50}
+    {type = "fluid", name = "sarkis-plasma", amount = 40},
+    {type = "fluid", name = "water", amount = 40}
   },
-  main_product = "copper-plate",
+  main_product = "iron-plate",
   crafting_machine_tint = {
     primary = {1,0,0},
     secondary = {1,0,0},

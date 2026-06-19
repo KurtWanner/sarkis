@@ -5,6 +5,7 @@ local recipe = {
   type = "recipe",
   category = "flesh-processing",
   enabled = true,
+  allow_productivity = false,
 
   -- Inventory Ordering
   subgroup = "flesh-subgroup",

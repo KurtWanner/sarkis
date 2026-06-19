@@ -1,7 +1,7 @@
 local recipe = {
   
   -- Creation Category
-  name = "fill-blood-syringe",
+  name = "empty-blood-syringe",
   type = "recipe",
   category = "crafting-with-fluid",
   enabled = true,
@@ -15,13 +15,13 @@ local recipe = {
 
   -- Recipe
   ingredients = {
-    {type = "item", name = "empty-syringe", amount = 1},
-    {type = "fluid", name = "sarkis-blood", amount = 10}
+    {type = "item", name = "blood-syringe", amount = 1}
   },
 
   energy_required = 1, -- time in seconds
   results = {
-    {type = "item", name = "blood-syringe", amount = 1}
+    {type = "item", name = "empty-syringe", amount = 1},
+    {type = "fluid", name = "sarkis-blood", amount = 10}
   },
 
 

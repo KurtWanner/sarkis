@@ -55,21 +55,19 @@ function Public.construct_reverse_pumpjack(event)
     
     
     local range_offset = drill_prototype.get_mining_drill_radius(quality) 
-
-
-    --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
-    --this check allows them to exist in mod-data without crashing.
-    local offset_width = drill_prototype.tile_width
-    local offset_height = drill_prototype.tile_height
-    local margin = 0.5
-    if offset_width ~= offset_height then return end 
+    
+    local box = drill_prototype.collision_box
+    local left_top = box.left_top
+    local right_bottom = box.right_bottom
 
     local colliding_entities = surface.find_entities_filtered{
-            area= {{position.x-offset_width/2+margin,position.y-offset_height/2+margin},{position.x+offset_width/2-margin,position.y+offset_height/2-margin}},
+            area= {{position.x + left_top.x, position.y + left_top.y}, {position.x + right_bottom.x, position.y + right_bottom.y}},
             to_be_deconstructed = false,
         }
     rro.replace(colliding_entities,function(entry) return entry.type == "corpse" end,nil)
-    if #colliding_entities ~= 0 then return end
+    for _, ent in ipairs(colliding_entities) do
+        if ent and ent.name ~= "inflammation-beacon" then return end
+    end
 
     
     -- Create ghost

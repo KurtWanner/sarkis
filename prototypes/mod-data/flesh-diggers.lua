@@ -1,7 +1,8 @@
 
 Sarkis.constants.flesh_drills = {
     ["electric-mining-drill"] = "electric-mining-drill",
-    ["big-mining-drill"] = "big-mining-drill"
+    ["big-mining-drill"] = "big-mining-drill",
+    ["burner-mining-drill"] = "burner-mining-drill"
 }
 
 Sarkis.constants.pumpjacks = {
@@ -32,4 +33,9 @@ Sarkis.constants.electric_mining_drill = {
         {25, 0.35, 0.1, 0},
         {25, 0.2, 0.15, 0.05}
     }
+}
+
+Sarkis.constants.burner_mining_drill = {
+    max_neighbors = 0,
+    recipes = {}
 }

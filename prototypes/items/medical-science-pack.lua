@@ -7,7 +7,9 @@ local item = {
     subgroup = "science-pack",
     order = "z[flesh]",
     weight = 10000,
-    durability = 1
+    durability = 1,
+    spoil_ticks = 60 * 60 * 60 * 10,
+    spoil_result = "sarkis-dead-flesh",
 }
 
 data:extend({item})

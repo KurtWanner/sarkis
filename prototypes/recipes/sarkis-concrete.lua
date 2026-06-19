@@ -15,7 +15,7 @@ local recipe = {
   -- Recipe
   ingredients = {
     {type = "item", name = "sarkis-bone-powder", amount = 5},
-    {type = "fluid", name = "sarkis-plasma", amount = 50}
+    {type = "fluid", name = "water", amount = 50}
   },
 
   energy_required = 3, -- time in seconds

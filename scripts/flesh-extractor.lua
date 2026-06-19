@@ -17,7 +17,7 @@ end
 
 function Public.update_neighbors(event)
 
-    game.print(event.entity.name)
+    --game.print(event.entity.name)
     local entity = event.entity
     local name = entity.name
     local position = entity.position
@@ -33,7 +33,7 @@ function Public.update_neighbors(event)
     }
 
     for _, machine in pairs(mining_drills) do
-        if machine.name:find("flesh") and machine.name:find("mining--drill") and machine ~= entity then
+        if machine.name:find("flesh") and machine.name:find("mining--drill") then
             Sarkis.events.execute_later("update_neighbors", 1, {event=event, entity=machine, recurse=false})
         end
     end
@@ -48,11 +48,13 @@ function Public.update_flesh_extractor(t)
         t.recurse or false,
         t.sub or 0
 
+    if not entity or not entity.valid then return end
+
     -- Search for surrounding drills
     -- Based on number of drills, get new entity
     -- Destroy and rebuild drill
 
-    game.print("Attempting to update entity")
+    --game.print("Attempting to update entity")
 
     local surface = entity.surface
     if surface.name ~= "sarkis" then return end
@@ -76,9 +78,9 @@ function Public.update_flesh_extractor(t)
 
     local num = math.max(0, tablelength(mining_drills) - 1 - sub)
     --game.print("Found " .. num .. " neighbors")
-
+    local oldForce = entity.force
     local deconstruct = entity.to_be_deconstructed() 
-    entity.destroy()
+    entity.destroy({raise_destroy = false})
 
     local new_name = "flesh-" .. drill_name .. "-" .. math.min(num, Sarkis.constants[drill_name:gsub("-", "_")].max_neighbors)
     --game.print("Replacing with " .. new_name)
@@ -86,10 +88,10 @@ function Public.update_flesh_extractor(t)
     local force
     if(event.player_index) then
         force = game.get_player(event.player_index).force
-    end
-
-    if(event.robot) then
+    elseif(event.robot) then
         force = event.robot.force
+    else 
+        force = oldForce
     end
 
     local new_entity = surface.create_entity {
@@ -114,7 +116,7 @@ function Public.update_flesh_extractor(t)
     }
 
     for _, machine in pairs(mining_drills) do
-        if machine.name:find("flesh") and machine.name:find("mining--drill") and machine ~= new_entity then
+        if machine.name:find("flesh") and machine.name:find("mining--drill") and not machine.name:find("ghost") and machine ~= new_entity then
             Public.update_flesh_extractor{event=event, entity=machine, recurse=false}
         end
     end
@@ -144,8 +146,15 @@ function Public.construct_flesh_extractor(event)
 
     if not Sarkis.constants.flesh_drills[name] then return end
     local drill_name = "flesh-" .. name .. "-0"
-    
-    local position = event.cursor_position
+
+    local x = event.cursor_position.x
+    local ix = (math.ceil(x) + math.floor(x)) / 2
+
+    local y = event.cursor_position.y
+    local iy = (math.ceil(y) + math.floor(y)) / 2
+
+    local position = {x = ix, y = iy}
+
     local direction = event.cursor_direction
     local player_position = (player.character or player).position
     local distance = math.sqrt((position.x-player_position.x)^2+(position.y-player_position.y)^2)
@@ -175,22 +184,28 @@ function Public.construct_flesh_extractor(event)
     local neighboring_resources = surface.find_entities_filtered{ --Search for resources to see if a regular mining drill would be placed.
         area= {{position.x-range_offset,position.y-range_offset},{position.x+range_offset,position.y+range_offset}}, 
         type = {"resource"},
-        
     }
 
     --If mining drill not square, this code can't cleanly handle it, so while mod-data should ideally not contain this drill,
     --this check allows them to exist in mod-data without crashing.
     local offset_width = drill_prototype.tile_width
     local offset_height = drill_prototype.tile_height
-    local margin = 0.5
-    if offset_width ~= offset_height then return end 
+    local box = drill_prototype.collision_box
+    local left_top = box.left_top
+    local right_bottom = box.right_bottom
+
+
 
     local colliding_entities = surface.find_entities_filtered{
-            area= {{position.x-offset_width/2+margin,position.y-offset_height/2+margin},{position.x+offset_width/2-margin,position.y+offset_height/2-margin}},
+            area= {{position.x + left_top.x, position.y + left_top.y}, {position.x + right_bottom.x, position.y + right_bottom.y}},
             to_be_deconstructed = false,
         }
     rro.replace(colliding_entities,function(entry) return entry.type == "corpse" end,nil)
-    if #colliding_entities ~= 0 then return end
+    
+
+    for _, ent in ipairs(colliding_entities) do
+        if ent and ent.name ~= "inflammation-beacon" then return end
+    end
     
     -- Create ghost
     local new_entity = surface.create_entity {
@@ -208,18 +223,19 @@ function Public.construct_flesh_extractor(event)
     if not is_ghost then
         cursor_stack.count = cursor_stack.count - 1
         force.get_entity_build_count_statistics(surface).on_flow(name,1)
+        Public.update_flesh_extractor{event=event, entity=new_entity,recurse=true}
     end
 
-    Public.update_flesh_extractor{event=event, entity=new_entity,recurse=true}
+   
 
 end
 
 
 Sarkis.events.on_event(Sarkis.events.events.on_destroyed(), Public.update_neighbors)
+Sarkis.events.on_event(Sarkis.events.events.on_built(), Public.update_neighbors)
 
 Sarkis.events.register_delayed_function("construct_flesh_extractor", Public.construct_flesh_extractor)
 Sarkis.events.register_delayed_function("update_neighbors", Public.update_flesh_extractor)
-
 
 Sarkis.events.on_event({"build", "build-ghost", "super-forced-build"}, function(event)
     Sarkis.events.execute_later("construct_flesh_extractor", 1, event)

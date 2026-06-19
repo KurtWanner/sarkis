@@ -18,7 +18,7 @@ function Public.generate_modules(entity, pollution)
         inventory.insert({name="sarkis-prod-plus", count=modules[3]})    
     end
 
-    game.print(modules[1] .. " " .. modules[2] .. " " .. modules[3])
+    --game.print(modules[1] .. " " .. modules[2] .. " " .. modules[3])
 end
 
 function Public.update_beacons()
@@ -30,10 +30,23 @@ function Public.update_beacons()
 
     for _, beacon in pairs(entities) do 
         pollution = surface.get_pollution(beacon.position) 
-        game.print(pollution)        
+        -- game.print(pollution)        
         Public.generate_modules(beacon, pollution)
     end
 
 end
 
+function Public.place_beacons(event)
+    local sarkis = event.surface
+    local left_top = event.area.left_top
+
+    sarkis.create_entity {
+        name = "inflammation-beacon",
+        position = {x = left_top.x + 16, y = left_top.y + 16},
+        create_build_effect_smoke = false,
+    }
+
+end
+
+Sarkis.events.on_event("on_chunk_generated", Public.place_beacons)
 Sarkis.events.on_nth_tick(128, Public.update_beacons)

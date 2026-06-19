@@ -1,9 +1,9 @@
 local recipe = {
   
   -- Creation Category
-  name = "sarkis-circuits",
+  name = "sarkis-carbon-fiber",
   type = "recipe",
-  category = "electronics",
+  category = "flesh-processing",
   enabled = true,
 
   -- Inventory Ordering
@@ -14,13 +14,13 @@ local recipe = {
 
   -- Recipe
   ingredients = {
-    {type = "item", name = "electronic-circuit", amount = 4},
-    {type = "item", name = "carbon-fiber", amount = 2}
+    {type = "item", name = "sarkis-nerve-fiber", amount = 1},
+    {type = "item", name = "carbon", amount = 1}
   },
 
-  energy_required = 2, -- time in seconds
+  energy_required = 0.5, -- time in seconds
   results = {
-    {type = "item", name = "processing-unit", amount = 1}
+    {type = "item", name = "carbon-fiber", amount = 1}
   },
 
 }

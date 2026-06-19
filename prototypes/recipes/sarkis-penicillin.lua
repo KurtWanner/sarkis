@@ -5,6 +5,7 @@ local recipe = {
   type = "recipe",
   category = "flesh-processing",
   enabled = true,
+  allow_productivity = false,
 
   -- Inventory Ordering
   subgroup = "flesh-subgroup",
@@ -14,13 +15,14 @@ local recipe = {
 
   -- Recipe
   ingredients = {
-    {type = "item", name = "sarkis-bacteria", amount = 2},
+    {type = "item", name = "syphilis-syringe", amount = 1},
     {type = "fluid", name = "sarkis-plasma", amount = 10}
   },
 
   energy_required = 1, -- time in seconds
   results = {
     {type = "item", name = "sarkis-penicillin", amount = 1},
+    {type = "item", name = "empty-syringe", amount = 1}
   },
   crafting_machine_tint = {
     primary = {1,0,0},

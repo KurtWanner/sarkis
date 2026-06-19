@@ -22,7 +22,7 @@ function Public.update_miner(t)
     -- Based on number of drills, get new entity
     -- Destroy and rebuild drill
 
-    game.print("Attempting to update entity")
+    --game.print("Attempting to update entity")
 
     local surface = entity.surface
     if surface.name ~= "sarkis" then return end

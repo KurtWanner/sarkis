@@ -1,4 +1,4 @@
-local recipe = {
+data:extend({{
   
   -- Creation Category
   name = "medical-laboratory",
@@ -14,16 +14,12 @@ local recipe = {
 
   -- Recipe
   ingredients = {
-    {type = "item", name = "electronic-circuit", amount = 5},
-    {type = "item", name = "iron-gear-wheel", amount = 5},
-    {type = "item", name = "pipe", amount = 5},
-    {type = "item", name = "steel-plate", amount = 5}
+    {type = "item", name = "sarkis-flesh", amount = 5},
+    {type = "item", name = "iron-plate", amount = 5},
+    {type = "item", name = "plastic-bar", amount = 5},
+    {type = "item", name = "steel-plate", amount = 2}
   },
 
   energy_required = 0.5, -- time in seconds
   results = {{type = "item", name = "medical-laboratory", amount = 1}}
-}
-
-data:extend({
-  recipe
-})
+}})

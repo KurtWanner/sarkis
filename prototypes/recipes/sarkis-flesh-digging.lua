@@ -2,12 +2,12 @@
 data:extend {{
   
   type = "recipe",
-  name = "sarkis-flesh-digging-basic",
+  name = "flesh-burner-mining-drill-0",
   category = "ground-digging",
   energy_required = 1,
   ingredients = {},
   results = {
-    {type = "item", name = "sarkis-flesh", amount = 3},
+    {type = "item", name = "sarkis-flesh", amount = 1},
 
   },
   enabled = false,
